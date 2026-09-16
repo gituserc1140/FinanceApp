@@ -23,7 +23,7 @@ def generate_insights(user_id: int = 1) -> list[str]:
             direction = "increased" if rate_delta > 0 else "decreased"
             insights.append(f"Your savings rate {direction} by {abs(rate_delta):.1f}% this month.")
 
-    subscription_share = (metrics["monthly_expenses"] and (metrics["monthly_expenses"] > 0))
+    subscription_share = metrics["monthly_expenses"] > 0
     if subscription_share and not cashflow.empty:
         latest_month = cashflow.iloc[-1]["month"]
         latest_expenses = cashflow.iloc[-1]["expenses"]
