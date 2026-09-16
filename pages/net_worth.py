@@ -62,21 +62,27 @@ def render_net_worth_page() -> None:
 
     with edit1:
         if not assets_df.empty:
-            selected_asset = st.selectbox("Asset", assets_df["name"].tolist())
-            asset_row = assets_df.loc[assets_df["name"] == selected_asset].iloc[0]
+            asset_options = {f"{row['name']} (ID {row['id']})": int(row["id"]) for _, row in assets_df.iterrows()}
+            selected_asset_label = st.selectbox("Asset", list(asset_options.keys()))
+            asset_id = asset_options[selected_asset_label]
+            asset_row = assets_df.loc[assets_df["id"] == asset_id].iloc[0]
             new_asset_value = st.number_input("New asset value (£)", min_value=0.0, value=float(asset_row["value"]))
             if st.button("Update asset"):
-                update_asset(int(asset_row["id"]), new_asset_value)
+                update_asset(asset_id, new_asset_value)
                 st.success("Asset updated")
                 st.rerun()
 
     with edit2:
         if not liabilities_df.empty:
-            selected_liability = st.selectbox("Liability", liabilities_df["name"].tolist())
-            liability_row = liabilities_df.loc[liabilities_df["name"] == selected_liability].iloc[0]
+            liability_options = {
+                f"{row['name']} (ID {row['id']})": int(row["id"]) for _, row in liabilities_df.iterrows()
+            }
+            selected_liability_label = st.selectbox("Liability", list(liability_options.keys()))
+            liability_id = liability_options[selected_liability_label]
+            liability_row = liabilities_df.loc[liabilities_df["id"] == liability_id].iloc[0]
             new_liability_value = st.number_input("New liability value (£)", min_value=0.0, value=float(liability_row["value"]))
             if st.button("Update liability"):
-                update_liability(int(liability_row["id"]), new_liability_value)
+                update_liability(liability_id, new_liability_value)
                 st.success("Liability updated")
                 st.rerun()
 

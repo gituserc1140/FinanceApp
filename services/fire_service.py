@@ -7,7 +7,7 @@ import pandas as pd
 
 def calculate_fire(
     age: int,
-    salary: float,
+    annual_salary: float,
     savings: float,
     monthly_expenses: float,
     annual_return_percent: float,
@@ -16,7 +16,7 @@ def calculate_fire(
     annual_expenses = monthly_expenses * 12
     fire_number = annual_expenses * 25
 
-    annual_savings = max((salary * 12) - annual_expenses, 0.0)
+    annual_savings = max(annual_salary - annual_expenses, 0.0)
     growth_rate = annual_return_percent / 100
 
     wealth = savings

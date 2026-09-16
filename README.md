@@ -53,7 +53,7 @@ streamlit run app.py
 ## Demo Data
 
 - The app auto-initialises an SQLite database (`moneyos_uk.db`) with demo records on first run.
-- An example bank statement CSV is provided at `/home/runner/work/FinanceApp/FinanceApp/assets/demo_bank_statement.csv` for Subscription Audit testing.
+- An example bank statement CSV is provided at `assets/demo_bank_statement.csv` for Subscription Audit testing.
 
 ## Deployment Notes (Streamlit Community Cloud)
 
