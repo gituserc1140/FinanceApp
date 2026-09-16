@@ -63,7 +63,7 @@ def render_net_worth_page() -> None:
     with edit1:
         if not assets_df.empty:
             asset_options = {f"{row['name']} (ID {row['id']})": int(row["id"]) for _, row in assets_df.iterrows()}
-            selected_asset_label = st.selectbox("Asset", list(asset_options.keys()))
+            selected_asset_label = st.selectbox("Select asset to edit", list(asset_options.keys()))
             asset_id = asset_options[selected_asset_label]
             asset_row = assets_df.loc[assets_df["id"] == asset_id].iloc[0]
             new_asset_value = st.number_input("New asset value (£)", min_value=0.0, value=float(asset_row["value"]))
@@ -77,7 +77,7 @@ def render_net_worth_page() -> None:
             liability_options = {
                 f"{row['name']} (ID {row['id']})": int(row["id"]) for _, row in liabilities_df.iterrows()
             }
-            selected_liability_label = st.selectbox("Liability", list(liability_options.keys()))
+            selected_liability_label = st.selectbox("Select liability to edit", list(liability_options.keys()))
             liability_id = liability_options[selected_liability_label]
             liability_row = liabilities_df.loc[liabilities_df["id"] == liability_id].iloc[0]
             new_liability_value = st.number_input("New liability value (£)", min_value=0.0, value=float(liability_row["value"]))

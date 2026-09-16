@@ -44,12 +44,13 @@ def detect_recurring_transactions(df: pd.DataFrame) -> pd.DataFrame:
         .rename(columns={"description": "merchant"})
     )
 
-    recurring = grouped[(grouped["count"] >= 3) & (grouped["avg_amount"] > 0)].copy()
+    grouped["avg_amount_abs"] = grouped["avg_amount"].abs()
+    recurring = grouped[(grouped["count"] >= 3) & (grouped["avg_amount_abs"] > 0)].copy()
     recurring["std_amount"] = recurring["std_amount"].fillna(0)
-    recurring = recurring[recurring["std_amount"] <= recurring["avg_amount"] * 0.25]
+    recurring = recurring[recurring["std_amount"] <= recurring["avg_amount_abs"] * 0.25]
 
     span_months = ((recurring["last_seen"] - recurring["first_seen"]).dt.days / 30.44).clip(lower=1)
     frequency_per_month = recurring["count"] / span_months
-    recurring["annual_cost"] = recurring["avg_amount"] * frequency_per_month * 12
+    recurring["annual_cost"] = recurring["avg_amount_abs"] * frequency_per_month * 12
     recurring = recurring.sort_values("annual_cost", ascending=False)
     return recurring

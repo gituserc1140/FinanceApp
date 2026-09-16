@@ -30,6 +30,13 @@ def render_health_score_page() -> None:
     )
     fig.update_layout(title="Score Breakdown (each out of 25)", yaxis_range=[0, 25])
     st.plotly_chart(fig, use_container_width=True)
+    st.caption(
+        "Emergency Fund: "
+        f"{result.emergency_fund_score}/25 | "
+        f"Debt Ratio: {result.debt_ratio_score}/25 | "
+        f"Savings Rate: {result.savings_rate_score}/25 | "
+        f"Investment Habits: {result.investment_habit_score}/25"
+    )
 
     st.subheader("Personalised Recommendations")
     for recommendation in health_recommendations(result):

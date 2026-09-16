@@ -50,11 +50,13 @@ def render_goals_page() -> None:
             st.write("Estimated completion: update monthly contribution to calculate forecast")
 
     st.subheader("Update Goal Amount")
-    selected_goal = st.selectbox("Select goal", goals_df["name"].tolist())
-    selected = goals_df.loc[goals_df["name"] == selected_goal].iloc[0]
+    goal_options = {f"{row['name']} (ID {row['id']})": int(row["id"]) for _, row in goals_df.iterrows()}
+    selected_goal_label = st.selectbox("Select goal to update", list(goal_options.keys()))
+    selected_goal_id = goal_options[selected_goal_label]
+    selected = goals_df.loc[goals_df["id"] == selected_goal_id].iloc[0]
     current_value = st.number_input("New current amount (£)", min_value=0.0, value=float(selected["current_amount"]))
     if st.button("Update progress"):
-        update_goal_progress(int(selected["id"]), current_value)
+        update_goal_progress(selected_goal_id, current_value)
         st.success("Goal progress updated")
         st.rerun()
 
