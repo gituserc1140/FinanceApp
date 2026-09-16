@@ -30,9 +30,10 @@ def detect_recurring_transactions(df: pd.DataFrame) -> pd.DataFrame:
     working["date"] = pd.to_datetime(working["date"], errors="coerce")
     working["amount"] = pd.to_numeric(working["amount"], errors="coerce")
     working = working.dropna(subset=["date", "description", "amount"])
+    working["merchant"] = working["description"].str.strip().str.lower()
 
     grouped = (
-        working.groupby(working["description"].str.strip().str.lower())
+        working.groupby("merchant")
         .agg(
             count=("amount", "count"),
             avg_amount=("amount", "mean"),
@@ -41,7 +42,6 @@ def detect_recurring_transactions(df: pd.DataFrame) -> pd.DataFrame:
             last_seen=("date", "max"),
         )
         .reset_index()
-        .rename(columns={"description": "merchant"})
     )
 
     grouped["avg_amount_abs"] = grouped["avg_amount"].abs()

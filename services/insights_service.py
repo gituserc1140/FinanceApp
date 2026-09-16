@@ -3,13 +3,11 @@
 from __future__ import annotations
 
 from services.cashflow_service import get_monthly_cashflow
-from services.dashboard_service import get_dashboard_metrics
 from services.goal_service import get_goals
 
 
 def generate_insights(user_id: int = 1) -> list[str]:
     """Generate deterministic financial insights."""
-    metrics = get_dashboard_metrics(user_id=user_id)
     cashflow = get_monthly_cashflow(user_id=user_id)
     goals = get_goals(user_id=user_id)
 
@@ -23,8 +21,7 @@ def generate_insights(user_id: int = 1) -> list[str]:
             direction = "increased" if rate_delta > 0 else "decreased"
             insights.append(f"Your savings rate {direction} by {abs(rate_delta):.1f}% this month.")
 
-    subscription_share = metrics["monthly_expenses"] > 0
-    if subscription_share and not cashflow.empty:
+    if not cashflow.empty:
         latest_month = cashflow.iloc[-1]["month"]
         latest_expenses = cashflow.iloc[-1]["expenses"]
         if latest_expenses > 0:

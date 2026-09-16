@@ -32,7 +32,11 @@ def render_fire_calculator_page() -> None:
 
     c1, c2 = st.columns(2)
     c1.metric("FIRE Number", format_gbp(float(output["fire_number"])))
-    c2.metric("Estimated Retirement Age", int(output["estimated_retirement_age"]))
+    retirement_age = output["estimated_retirement_age"]
+    c2.metric(
+        "Estimated Retirement Age",
+        int(retirement_age) if retirement_age is not None else "Not reached within projection window",
+    )
 
     projection = output["projection"]
     fig = px.line(projection, x="Age", y="Projected Wealth", title="Wealth Growth Projection")

@@ -11,7 +11,7 @@ def calculate_fire(
     savings: float,
     monthly_expenses: float,
     annual_return_percent: float,
-) -> dict[str, float | int | pd.DataFrame]:
+) -> dict[str, float | int | None | pd.DataFrame]:
     """Calculate FIRE metrics and wealth projections."""
     annual_expenses = monthly_expenses * 12
     fire_number = annual_expenses * 25
@@ -34,6 +34,6 @@ def calculate_fire(
 
     return {
         "fire_number": fire_number,
-        "estimated_retirement_age": retirement_age or (age + 50),
+        "estimated_retirement_age": retirement_age,
         "projection": projection,
     }

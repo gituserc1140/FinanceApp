@@ -84,9 +84,19 @@ def create_snapshot(user_id: int = 1) -> None:
     liabilities_total = conn.execute("SELECT COALESCE(SUM(value), 0) FROM liabilities WHERE user_id = ?", (user_id,)).fetchone()[0]
     net_worth = assets_total - liabilities_total
 
-    conn.execute(
-        "INSERT INTO net_worth_snapshots (user_id, snapshot_date, assets_total, liabilities_total, net_worth) VALUES (?, date('now'), ?, ?, ?)",
-        (user_id, assets_total, liabilities_total, net_worth),
-    )
+    existing = conn.execute(
+        "SELECT id FROM net_worth_snapshots WHERE user_id = ? AND snapshot_date = date('now')",
+        (user_id,),
+    ).fetchone()
+    if existing:
+        conn.execute(
+            "UPDATE net_worth_snapshots SET assets_total = ?, liabilities_total = ?, net_worth = ? WHERE id = ?",
+            (assets_total, liabilities_total, net_worth, existing["id"]),
+        )
+    else:
+        conn.execute(
+            "INSERT INTO net_worth_snapshots (user_id, snapshot_date, assets_total, liabilities_total, net_worth) VALUES (?, date('now'), ?, ?, ?)",
+            (user_id, assets_total, liabilities_total, net_worth),
+        )
     conn.commit()
     st.cache_data.clear()
