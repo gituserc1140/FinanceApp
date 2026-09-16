@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from datetime import date
+
 import plotly.express as px
 import streamlit as st
 
@@ -14,7 +16,7 @@ def render_side_hustle_page() -> None:
     st.title("Side Hustle Profit Tracker")
 
     with st.form("side_hustle_form"):
-        month = st.text_input("Month (YYYY-MM)", value="2026-10")
+        month = st.text_input("Month (YYYY-MM)", value=date.today().strftime("%Y-%m"))
         revenue = st.number_input("Revenue (£)", min_value=0.0, step=50.0)
         expenses = st.number_input("Expenses (£)", min_value=0.0, step=50.0)
         ad_spend = st.number_input("Advertising spend (£)", min_value=0.0, step=50.0)

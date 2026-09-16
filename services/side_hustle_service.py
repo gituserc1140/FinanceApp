@@ -45,9 +45,10 @@ def calculate_profitability(df: pd.DataFrame) -> pd.DataFrame:
     output = df.copy()
     output["total_costs"] = output[["expenses", "ad_spend", "platform_fees", "estimated_tax"]].sum(axis=1)
     output["profit"] = output["revenue"] - output["total_costs"]
-    output["profit_margin"] = output.apply(
-        lambda row: (row["profit"] / row["revenue"] * 100) if row["revenue"] > 0 else 0,
-        axis=1,
+    output["profit_margin"] = 0.0
+    valid_revenue = output["revenue"] > 0
+    output.loc[valid_revenue, "profit_margin"] = (
+        output.loc[valid_revenue, "profit"] / output.loc[valid_revenue, "revenue"] * 100
     )
     output["break_even_revenue"] = output["total_costs"]
     return output

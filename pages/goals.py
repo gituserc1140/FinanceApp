@@ -61,7 +61,7 @@ def render_goals_page() -> None:
         st.rerun()
 
     progress_chart = goals_df.copy()
-    progress_chart["remaining"] = progress_chart["target_amount"] - progress_chart["current_amount"]
+    progress_chart["remaining"] = (progress_chart["target_amount"] - progress_chart["current_amount"]).clip(lower=0)
     fig = px.bar(
         progress_chart,
         x="name",
