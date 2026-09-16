@@ -45,7 +45,7 @@ def render_goals_page() -> None:
             f"{format_gbp(float(row['current_amount']))} / {format_gbp(float(row['target_amount']))}"
         )
         if forecast.months_to_target is not None:
-            st.write(f"Estimated completion: {forecast.months_to_target:.1f} months")
+            st.write(f"Estimated completion: {forecast.months_to_target} months")
         else:
             st.write("Estimated completion: update monthly contribution to calculate forecast")
 

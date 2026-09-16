@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 import pandas as pd
 import streamlit as st
 
@@ -53,5 +55,5 @@ def forecast_goal_completion(target_amount: float, current_amount: float, monthl
         return GoalForecast(months_to_target=None, completion_percentage=completion)
 
     remaining = max(target_amount - current_amount, 0)
-    months = remaining / monthly_contribution
+    months = math.ceil(remaining / monthly_contribution)
     return GoalForecast(months_to_target=months, completion_percentage=completion)

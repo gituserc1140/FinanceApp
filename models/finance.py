@@ -9,7 +9,7 @@ from dataclasses import dataclass
 class GoalForecast:
     """Goal progress and estimated completion details."""
 
-    months_to_target: float | None
+    months_to_target: int | None
     completion_percentage: float
 
 

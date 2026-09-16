@@ -22,11 +22,11 @@ def calculate_fire(
     wealth = savings
     projection_rows = []
 
-    retirement_age = age
+    retirement_age: int | None = None
     for year in range(0, 51):
         current_age = age + year
         projection_rows.append({"Age": current_age, "Projected Wealth": wealth})
-        if wealth >= fire_number and retirement_age == age:
+        if wealth >= fire_number and retirement_age is None:
             retirement_age = current_age
         wealth = (wealth + annual_savings) * (1 + growth_rate)
 
@@ -34,6 +34,6 @@ def calculate_fire(
 
     return {
         "fire_number": fire_number,
-        "estimated_retirement_age": retirement_age,
+        "estimated_retirement_age": retirement_age or (age + 50),
         "projection": projection,
     }

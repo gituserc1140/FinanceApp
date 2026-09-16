@@ -37,6 +37,7 @@ def detect_recurring_transactions(df: pd.DataFrame) -> pd.DataFrame:
             count=("amount", "count"),
             avg_amount=("amount", "mean"),
             std_amount=("amount", "std"),
+            first_seen=("date", "min"),
             last_seen=("date", "max"),
         )
         .reset_index()
@@ -47,6 +48,8 @@ def detect_recurring_transactions(df: pd.DataFrame) -> pd.DataFrame:
     recurring["std_amount"] = recurring["std_amount"].fillna(0)
     recurring = recurring[recurring["std_amount"] <= recurring["avg_amount"] * 0.25]
 
-    recurring["annual_cost"] = recurring["avg_amount"] * 12
+    span_months = ((recurring["last_seen"] - recurring["first_seen"]).dt.days / 30.44).clip(lower=1)
+    frequency_per_month = recurring["count"] / span_months
+    recurring["annual_cost"] = recurring["avg_amount"] * frequency_per_month * 12
     recurring = recurring.sort_values("annual_cost", ascending=False)
     return recurring
