@@ -38,10 +38,19 @@ def generate_insights(user_id: int = 1) -> list[str]:
             insights.append(f"Subscriptions account for {share:.1f}% of expenses.")
 
     if not goals.empty:
-        top_goal = goals.iloc[0]
-        remaining = max(top_goal["target_amount"] - top_goal["current_amount"], 0)
-        if top_goal["monthly_contribution"] > 0:
-            months = int(remaining / top_goal["monthly_contribution"] + 0.999)
+        goals_with_forecasts = goals.copy()
+        goals_with_forecasts["remaining"] = (
+            goals_with_forecasts["target_amount"] - goals_with_forecasts["current_amount"]
+        ).clip(lower=0)
+        goals_with_forecasts = goals_with_forecasts[
+            (goals_with_forecasts["monthly_contribution"] > 0) & (goals_with_forecasts["remaining"] > 0)
+        ].copy()
+        if not goals_with_forecasts.empty:
+            goals_with_forecasts["months_to_goal"] = (
+                goals_with_forecasts["remaining"] / goals_with_forecasts["monthly_contribution"]
+            )
+            top_goal = goals_with_forecasts.sort_values("months_to_goal").iloc[0]
+            months = int(top_goal["months_to_goal"] + 0.999)
             insights.append(f"You are on track to reach your {top_goal['name']} goal in about {months} months.")
 
     if not insights:
