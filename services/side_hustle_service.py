@@ -12,7 +12,7 @@ from database.connection import get_connection
 def get_side_hustle_records(user_id: int = 1) -> pd.DataFrame:
     """Return side hustle monthly records."""
     return pd.read_sql_query(
-        "SELECT id, month, revenue, expenses, ad_spend, platform_fees, estimated_tax FROM side_hustles WHERE user_id = ? ORDER BY month",
+        "SELECT id, month, revenue, expenses, ad_spend, platform_fees, estimated_tax FROM side_hustles WHERE user_id = ? ORDER BY date(month || '-01')",
         get_connection(),
         params=(user_id,),
     )

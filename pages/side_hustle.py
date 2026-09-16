@@ -16,7 +16,8 @@ def render_side_hustle_page() -> None:
     st.title("Side Hustle Profit Tracker")
 
     with st.form("side_hustle_form"):
-        month = st.text_input("Month (YYYY-MM)", value=date.today().strftime("%Y-%m"))
+        month_value = st.date_input("Month", value=date.today(), format="YYYY/MM/DD")
+        month = month_value.strftime("%Y-%m")
         revenue = st.number_input("Revenue (£)", min_value=0.0, step=50.0)
         expenses = st.number_input("Expenses (£)", min_value=0.0, step=50.0)
         ad_spend = st.number_input("Advertising spend (£)", min_value=0.0, step=50.0)
@@ -24,7 +25,7 @@ def render_side_hustle_page() -> None:
         estimated_tax = st.number_input("Estimated tax (£)", min_value=0.0, step=25.0)
         submitted = st.form_submit_button("Add monthly record")
 
-        if submitted and month:
+        if submitted:
             add_side_hustle_record(month, revenue, expenses, ad_spend, platform_fees, estimated_tax)
             st.success("Record added")
             st.rerun()

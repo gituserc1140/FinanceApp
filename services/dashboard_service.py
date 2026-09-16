@@ -45,7 +45,7 @@ def get_dashboard_metrics(user_id: int = 1) -> dict[str, float]:
     else:
         income = float(monthly["income"].iloc[0])
         expenses = float(monthly["expenses"].iloc[0])
-        savings = income - expenses
+        savings = float(monthly["savings"].iloc[0])
 
     savings_rate = (savings / income * 100) if income > 0 else 0.0
 
